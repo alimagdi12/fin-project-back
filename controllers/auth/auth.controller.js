@@ -2,7 +2,22 @@ const authService = require("../../services/auth/auth.service");
 const { getPublicIpMiddleware } = require("../../middlewares/location");
 const geoip = require('geoip-lite');
 const Email = require('../../middlewares/email');
-const User = require('../../models/user/user.model')
+const User = require('../../models/user/user.model');
+
+
+
+exports.createRole = async (req, res, next) => {
+    try {
+        const { role } = req.body;
+        const newRole = await authService.createRole(role);
+        res.status(201).json({ message: 'Role created successfully', role: newRole });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to create role', error: error.message });
+    }
+};
+
+
 
 exports.postSignup = async (req, res, next) => {
     try {
@@ -52,16 +67,15 @@ exports.postLogin = async (req, res, next) => {
 
 
 
-exports.addNotification = async (req, res, next) => {
-    const user = await User.findById('662d46a1c299a722709b0be1')
-    user.addToNotification({
-        reference: 's',
-        status: 'unread',
-    })
-}
+// exports.addNotification = async (req, res, next) => {
+//     const user = '662ea5c597ec8f2d5c29c728'
+//     user.addToNotification({
+//         body: 's',
+//     })
+// }
 
 
-exports.removeNotification = async (req, res ,next) => {
-    const user = await User.findById('662d46a1c299a722709b0be1');
-    user.removeFromNotification('662d498a561d8f24c08418e1')
-}
+// exports.removeNotification = async (req, res ,next) => {
+//     const user = await User.findById('662d46a1c299a722709b0be1');
+//     user.removeFromNotification('662d498a561d8f24c08418e1')
+// }

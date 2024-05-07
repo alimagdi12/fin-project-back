@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const authController = require("../../controllers/auth/auth.controller");
+const upload = require('../../middlewares/multer')
 
-router.post("/signup", authController.postSignup);
+// router.post('/upload', authService.uploadImage);
 
-router.post("/login", authController.postLogin);
+router.post('/addRole', authController.createRole);
 
-router.post('/test', authController.addNotification);
+router.post('/signup' ,authController.postSignup);
 
-router.post('/remove',authController.removeNotification)
+router.post('/login', authController.postLogin);
+
 module.exports = router;
