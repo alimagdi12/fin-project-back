@@ -24,14 +24,17 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array('images', 5); // Up to 5 images
 
 exports.uploadImage = (req, res, next) => {
-    upload(req, res, (err) => {
-        if (err) {
-            return res.status(400).send({ message: 'Error uploading files', error: err });
-        }
-
-        // Files uploaded successfully
-        console.log('Files uploaded successfully' );
-        next();
+    return new Promise((resolve, reject) => {
+        upload(req, res, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                // Files uploaded successfully
+                console.log('Files uploaded successfully');
+                resolve();
+            }
+        });
     });
 };
+
 

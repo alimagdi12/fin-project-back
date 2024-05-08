@@ -5,7 +5,6 @@ const Email = require('../../middlewares/email');
 const User = require('../../models/user/user.model');
 
 
-
 exports.createRole = async (req, res, next) => {
     try {
         const { role } = req.body;
@@ -22,10 +21,19 @@ exports.createRole = async (req, res, next) => {
 exports.postSignup = async (req, res, next) => {
     try {
         const result = await authService.signup(req.body);
+
+        const user = await User.findOne({ email: req.body.email });
+        if (user && req.files && req.files.length > 0) {
+            if (!user.imageUrl) {
+                user.imageUrl = { images: [] };
+            }
+            user.addImageUrl(req.files[0].filename); 
+        }
+
         res.status(201).json({ msg: 'user created successfully', result });
     } catch (err) {
         console.error(err);
-        res.status(500).json({msg:'failed to create user', error: err.message});
+        res.status(500).json({ msg: 'failed to create user', error: err.message });
     }
 };
 
@@ -64,6 +72,54 @@ exports.postLogin = async (req, res, next) => {
         return res.status(422).json({msg:'error loging in ',err:err.message});
     }
 };
+
+
+exports.editUser = async (req, res, next) => {
+    try {
+        const token = req.headers['jwt'];
+        const result = await authService.editUser(req.body, token);
+        res.status(201).json({ message: 'user edited successfully', result });
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({ msg: 'failed to edit user', error: error.message });
+    }
+};
+
+
+exports.deleteUser = async (req, res, next) => {
+    try {
+        const token = req.headers['jwt'];
+        const result = await authService.deleteUser(token);
+        res.status(201).json({ message: 'user deleted successfully', result });
+    } catch (err) {
+        console.log(err);
+        res.status(200).json({ msg: err.message })
+    }
+};
+
+
+
+exports.updateUserImage = async (req, res, next) => {
+    try {
+        const token = req.headers['jwt'];
+        const result = await authService.updateUserImage(token);
+        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+        const email = decodedToken.email;
+        const user = await User.findOne({ email });
+
+        if (user && req.files && req.files.length > 0) {
+            if (!user.imageUrl) {
+                user.imageUrl = { images: [] };
+            }
+            user.addImageUrl(req.files[0].filename); 
+        }
+        res.status(201).json({ message: 'user image updated successfully', result });
+    } catch (err) {
+        console.log(err);
+        res.status(200).json({msg:"error updating image", msg: err.message })
+    }
+}
+
 
 
 
