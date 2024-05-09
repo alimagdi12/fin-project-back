@@ -16,7 +16,7 @@ exports.createRole = async (role) => {
 exports.signup = async (userData) => {
     try {
         
-        const { firstName, lastName, birthDay, email, phoneNumber, password, confirmPassword } = userData;
+        const { firstName, lastName, birthDay, email, phoneNumber, password, confirmPassword  } = userData;
 
         if (!password || !confirmPassword) {
             throw new Error('Passwords are required');
@@ -41,14 +41,15 @@ exports.signup = async (userData) => {
         if (existingUser) {
             throw new Error('Email already exists');
         }
-
+        const folderName =firstName + new Date().toISOString().split('T')[0];
         const user = new User({
             firstName,
             lastName,
             birthDay,
             email,
             phoneNumber,
-            imageUrl: { images:[] },
+            imageUrl: { images: [] },
+            folderName,
             role,
             password: hashedPassword,
             notification: { items: [] },

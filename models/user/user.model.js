@@ -59,6 +59,13 @@ const UserSchema = new Schema({
             }
         ]
     },
+    folderName: {
+    type: String,
+        required: [
+            true,
+            'folder name must be provided'
+        ]
+    },
     role: {
         type: Schema.Types.ObjectId,
         ref: 'UserRole',
@@ -92,7 +99,7 @@ UserSchema.methods.deleteImageUrl = function(imageUrl) {
 
 UserSchema.methods.clearImageUrl = function() {
     this.imageUrl.images = [];
-    return this.save();
+    // return this.save();
 };
 
 UserSchema.methods.addNotification = function(notification) {

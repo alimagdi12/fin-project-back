@@ -3,7 +3,9 @@ const { getPublicIpMiddleware } = require("../../middlewares/location");
 const geoip = require('geoip-lite');
 const Email = require('../../middlewares/email');
 const User = require('../../models/user/user.model');
-
+const jwt = require("jsonwebtoken");
+const fs = require('fs');
+const path = require('path')
 
 exports.createRole = async (req, res, next) => {
     try {
@@ -27,7 +29,9 @@ exports.postSignup = async (req, res, next) => {
             if (!user.imageUrl) {
                 user.imageUrl = { images: [] };
             }
-            user.addImageUrl(req.files[0].filename); 
+
+            user.addImageUrl(req.files[0].filename);
+            
         }
 
         res.status(201).json({ msg: 'user created successfully', result });
@@ -98,27 +102,44 @@ exports.deleteUser = async (req, res, next) => {
 };
 
 
-
 exports.updateUserImage = async (req, res, next) => {
     try {
         const token = req.headers['jwt'];
-        const result = await authService.updateUserImage(token);
         const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
         const email = decodedToken.email;
         const user = await User.findOne({ email });
 
         if (user && req.files && req.files.length > 0) {
-            if (!user.imageUrl) {
-                user.imageUrl = { images: [] };
+            const file = req.files[0];
+
+            // If the user has an existing image, delete it
+            if (user.imageUrl && user.imageUrl.images && user.imageUrl.images.length > 0) {
+                const existingImage = user.imageUrl.images[0];
+                const imagePath = `./uploads/${existingImage}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
             }
-            user.addImageUrl(req.files[0].filename); 
+
+            // Save the new image in the user's folder
+            const folderName = user.folderName;
+            const uploadPath = `./uploads/${folderName}`;
+            fs.renameSync(file.path, `${uploadPath}/${file.filename}`);
+
+            // Update the image name in the database
+            user.clearImageUrl();
+            user.addImageUrl(`${file.filename}`);
+            // await user.save();
+
+            res.status(201).json({ message: 'user image updated successfully' });
+        } else {
+            res.status(400).json({ message: 'No user found or no image provided' });
         }
-        res.status(201).json({ message: 'user image updated successfully', result });
     } catch (err) {
-        console.log(err);
-        res.status(200).json({msg:"error updating image", msg: err.message })
+        console.error(err);
+        res.status(500).json({ msg: 'Error updating image', error: err.message });
     }
-}
+};
 
 
 
