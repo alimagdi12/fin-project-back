@@ -1,4 +1,3 @@
-// auth.service.js
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();

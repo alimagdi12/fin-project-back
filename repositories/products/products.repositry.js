@@ -1,8 +1,19 @@
 const ProductStatus = require('../../models/productStatus/productStatus.model');
 
-exports.createStatus = async (status) => {
-    const newStatus = new ProductStatus({ status });
-    await newStatus.save();
-    return newStatus;
-};
+
+
+
+class ProductRepositry{
+    constructor() { }
+    
+    async createStatus(status){ 
+        const newStatus = new ProductStatus({ status });
+        await newStatus.save();
+        return newStatus;
+    };
+    
+}
+
+
+module.exports = ProductRepositry;
 

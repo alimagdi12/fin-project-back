@@ -1,9 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const upload = require('../../middlewares/multer');
-const productsController = require('../../controllers/products/products.controller');
 
 
-router.post('/addStatus', productsController.createRole);
+const productRouter = (productsController) => {
 
-module.exports = router;
+    router.post('/addStatus', (req, res, next) => {
+        try{
+            productsController.createRole(req, res, next);
+        } catch (err) {
+            next(err);
+        };
+        
+    });
+
+
+
+    return router;
+    
+}
+
+
+module.exports = productRouter;
