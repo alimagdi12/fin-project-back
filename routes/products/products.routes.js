@@ -5,14 +5,7 @@ const upload = require('../../middlewares/multer');
 
 const productRouter = (productsController) => {
 
-    router.post('/addStatus', (req, res, next) => {
-        try{
-            productsController.createRole(req, res, next);
-        } catch (err) {
-            next(err);
-        };
-        
-    });
+    
 
 
 

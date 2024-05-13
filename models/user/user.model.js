@@ -5,15 +5,31 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     firstName: {
         type: String,
-        required: [true, 'You must enter a first name'],
-        minlength: [3, 'First name must be at least 3 letters'],
-        maxlength: [15, 'First name must be less than 15 letters']
+        required: [
+            true,
+            'You must enter a first name'
+        ],
+        minlength: [
+            3,
+            'First name must be at least 3 letters'
+        ],
+        maxlength: [
+            15,
+            'First name must be less than 15 letters'
+        ]
     },
     lastName: {
         type: String,
-        required: [true, 'You must enter a last name'],
-        minlength: [3, 'Last name must be at least 3 letters'],
-        maxlength: [15, 'Last name must be less than 15 letters'],
+        required: [
+            true,
+            'You must enter a last name'
+        ],
+        minlength: [
+            3, 'Last name must be at least 3 letters'
+        ],
+        maxlength: [
+            15, 'Last name must be less than 15 letters'
+        ],
         validate: {
             validator: function(value) {
                 return /^[a-zA-Z]+$/.test(value); // Only allow letters
@@ -23,7 +39,10 @@ const UserSchema = new Schema({
     },
     birthDay: {
         type: Date,
-        required: [true, 'You must enter a birthday'],
+        required: [
+            true,
+            'You must enter a birthday'
+        ],
         validate: {
             validator: function(date) {
                 const cutoffDate = new Date();
@@ -35,12 +54,20 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, 'You must enter an email'],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
+        required: [
+            true,
+            'You must enter an email'
+        ],
+        match: [
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'
+        ]
     },
     phoneNumber: {
         type: String,
-        required: [true, 'You must enter a phone number'],
+        required: [
+            true,
+            'You must enter a phone number'
+        ],
         validate: {
             validator: function(value) {
                 return /^\d{11}$/.test(value); // Only allow 10 digits
@@ -53,18 +80,17 @@ const UserSchema = new Schema({
             {
                 type: String,
                 required: [
-                    true,
-                    'you must enter a phone number'
+                    false
                 ],
             }
         ]
     },
     folderName: {
-    type: String,
-        required: [
-            true,
-            'folder name must be provided'
-        ]
+        type: String,
+            required: [
+                true,
+                'folder name must be provided'
+            ]
     },
     role: {
         type: Schema.Types.ObjectId,

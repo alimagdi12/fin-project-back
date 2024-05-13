@@ -9,13 +9,6 @@ class AuthRepositry {
     constructor() { };
 
 
-
-    async createRole(role) {
-        const newRole = new UserRole({ role });
-        await newRole.save();
-        return newRole;
-    }
-
     async signup(userData) {
         try {
             const { firstName, lastName, birthDay, email, phoneNumber, password, confirmPassword } = userData;

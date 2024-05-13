@@ -4,16 +4,6 @@ const upload = require('../../middlewares/multer');
 
 
 const authRouter = (authController) => {
-
-    router.post('/addRole', async (req, res, next) => {
-        try {
-
-            await authController.createRole(req, res, next);
-
-        } catch (err) {
-            next(err)
-        }
-    });
     
     router.post('/signup', async (req, res, next) => {
         try {

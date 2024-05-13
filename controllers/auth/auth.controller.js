@@ -10,16 +10,6 @@ class AuthController {
         this.authRepositry = authRepositry;
     }
 
-    async createRole(req, res, next) {
-        try {
-            const { role } = req.body;
-            const newRole = await this.authRepositry.createRole(role);
-            res.status(201).json({ message: 'Role created successfully', role: newRole });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Failed to create role', error: error.message });
-        }
-    }
 
     async postSignup(req, res, next) {
         try {
