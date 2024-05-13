@@ -4,7 +4,6 @@ const connect = require('./db/connection')
 const PORT = process.env.PORT;
 const app = express();
 const requestIp = require('request-ip');
-const bodyParser = require('body-parser');
 
 
 // calling AuthRespositry and AuthController
@@ -43,8 +42,6 @@ const userRoleRoutes = require('./routes/userRole/userRole.routes');
 // Middleware to get client's IP address
 app.use(requestIp.mw());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
 
 
