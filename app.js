@@ -18,6 +18,15 @@ const ProductStatusController = require('./controllers/productStatus/productStat
 // calling userRoleRepository and UserRoleController
 const UserRoleRepository = require('./repositories/userRole/userRole.repository');
 const UserRoleController = require('./controllers/userRole/userRole.controller');
+// calling CategoryRepository and CategoryController
+const CategoryRepository = require('./repositories/category/category.repositry');
+const CategoryController = require('./controllers/category/category.controller');
+// calling categoryRepository and CategoryController
+const SubcategoryRepository = require('./repositories/subcategory/subCategory.repository');
+const SubcategoryController = require('./controllers/subCategory/subCategory.controller');
+
+
+
 
 
 // Create instances of AuthRepository and AuthController
@@ -29,9 +38,15 @@ const productController = new ProductController(productRespositry);
 // Create instances of ProductStatusRepositry and ProductStatusController
 const productStatusRespositry = new ProductStatusRepositry();
 const productStatusController = new ProductStatusController(productStatusRespositry);
-// Create instances of ProductStatusRepositry and ProductStatusController
+// Create instances of userRoleRepository and userRoleController
 const userRoleRepository = new UserRoleRepository();
 const userRoleController = new UserRoleController(userRoleRepository);
+// Create instances of userRoleRepository and userRoleController
+const categoryRepository = new CategoryRepository();
+const categoryController = new CategoryController(categoryRepository);
+// Create instances of subCategoryRepository and subCategoryController
+const subcategoryRepository = new SubcategoryRepository();
+const subcategoryController = new SubcategoryController(subcategoryRepository);
 
 
 // routes of the whole application
@@ -39,6 +54,8 @@ const authRoutes = require("./routes/auth/auth.routes");
 const productsRoutes = require('./routes/products/products.routes');
 const productStatusRoutes = require('./routes/productStatus/productStatus.routes');
 const userRoleRoutes = require('./routes/userRole/userRole.routes');
+const categoryRoutes = require('./routes/category/category.routes');
+const subCategoryRoutes = require('./routes/subCategory/subCategory.routes');
 // Middleware to get client's IP address
 app.use(requestIp.mw());
 
@@ -50,7 +67,12 @@ app.use(express.json());
 app.use("/api/v1/auth", authRoutes(authController));
 app.use("/api/v1/products", productsRoutes(productController));
 app.use('/api/v1', productStatusRoutes(productStatusController));
-app.use('/api/v1/admin', userRoleRoutes(userRoleController));
+app.use('/api/v1/admin', [
+        userRoleRoutes(userRoleController),
+        categoryRoutes(categoryController),
+        subCategoryRoutes(subcategoryController)
+    ]
+);
 
 connect
     .connection
