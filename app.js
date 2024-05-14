@@ -24,6 +24,9 @@ const CategoryController = require('./controllers/category/category.controller')
 // calling categoryRepository and CategoryController
 const SubcategoryRepository = require('./repositories/subcategory/subCategory.repository');
 const SubcategoryController = require('./controllers/subCategory/subCategory.controller');
+// calling UserRepository and UserController
+const UserRepository = require('./repositories/user/user.repository');
+const UserController = require('./controllers/user/user.controller');
 
 
 
@@ -47,6 +50,11 @@ const categoryController = new CategoryController(categoryRepository);
 // Create instances of subCategoryRepository and subCategoryController
 const subcategoryRepository = new SubcategoryRepository();
 const subcategoryController = new SubcategoryController(subcategoryRepository);
+// Create instances of userRepository and userController
+const userRepository = new UserRepository();
+const userController = new UserController(userRepository);
+
+
 
 
 // routes of the whole application
@@ -56,6 +64,7 @@ const productStatusRoutes = require('./routes/productStatus/productStatus.routes
 const userRoleRoutes = require('./routes/userRole/userRole.routes');
 const categoryRoutes = require('./routes/category/category.routes');
 const subCategoryRoutes = require('./routes/subCategory/subCategory.routes');
+const userRoutes = require('./routes/user/user.routes');
 // Middleware to get client's IP address
 app.use(requestIp.mw());
 
@@ -64,7 +73,7 @@ app.use(express.json());
 
 
 // executing the routes 
-app.use("/api/v1/auth", authRoutes(authController));
+app.use("/api/v1/auth", [authRoutes(authController),userRoutes(userController)]);
 app.use("/api/v1/products", productsRoutes(productController));
 app.use('/api/v1', productStatusRoutes(productStatusController));
 app.use('/api/v1/admin', [

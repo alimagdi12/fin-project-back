@@ -95,67 +95,7 @@ class AuthRepositry {
         return token;
     }
 
-    async editUser(userData, token) {
-        try {
-            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
-            const email = decodedToken.email;
-            const user = await User.findOne({ email });
-            if (!user) {
-                throw new Error("User not found.");
-            }
-
-            // Check if any fields need to be updated
-            const updated = (
-                (userData.firstName && userData.firstName !== user.firstName ? user.firstName = userData.firstName : false) ||
-                (userData.lastName && userData.lastName !== user.lastName ? user.lastName = userData.lastName : false) ||
-                (userData.birthDay && userData.birthDay !== user.birthDay ? user.birthDay = userData.birthDay : false) ||
-                (userData.phoneNumber && userData.phoneNumber !== user.phoneNumber ? user.phoneNumber = userData.phoneNumber : false)
-            );
-
-            // Save user if there are updates
-            if (updated) {
-                await user.save();
-            }
-
-            return user;
-        } catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
-
-    async deleteUser(token) {
-        try {
-            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
-            const email = decodedToken.email;
-            const user = await User.findOne({ email });
-            if (!user) {
-                throw new Error("User not found.");
-            }
-
-            await user.remove();
-
-            return user;
-        } catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
-
-     async updateUserImage(token){
-    try {
-        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
-        const email = decodedToken.email;
-        const user = await User.findOne({ email });
-        if (!user) {
-            throw new Error("User not found.");
-        }
-        return user;
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-};
+    
 }
 
 module.exports = AuthRepositry;

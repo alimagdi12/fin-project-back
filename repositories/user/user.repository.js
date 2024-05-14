@@ -1,0 +1,102 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const Email = require('../../middlewares/email');
+const User = require("../../models/user/user.model");
+const UserRole = require('../../models/userRole/userRole.model');
+
+class UserRepositry {
+    constructor() { };
+
+    async editUser(userData, token) {
+        try {
+            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+            const email = decodedToken.email;
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new Error("User not found.");
+            }
+
+            // Check if any fields need to be updated
+            const updated = (
+                (userData.firstName && userData.firstName !== user.firstName ? user.firstName = userData.firstName : false) ||
+                (userData.lastName && userData.lastName !== user.lastName ? user.lastName = userData.lastName : false) ||
+                (userData.birthDay && userData.birthDay !== user.birthDay ? user.birthDay = userData.birthDay : false) ||
+                (userData.phoneNumber && userData.phoneNumber !== user.phoneNumber ? user.phoneNumber = userData.phoneNumber : false)
+            );
+
+            // Save user if there are updates
+            if (updated) {
+                await user.save();
+            }
+
+            return user;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    async deleteUser(token) {
+        try {
+            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+            const email = decodedToken.email;
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new Error("User not found.");
+            }
+
+            await user.remove();
+
+            return user;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    async updateUserImage(token, files) {
+        try {
+            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+            const email = decodedToken.email;
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new Error("User not found.");
+            }
+
+            if (files && files.length > 0) {
+                const file = files[0];
+
+                // If the user has an existing image, delete it
+                if (user.imageUrl && user.imageUrl.images && user.imageUrl.images.length > 0) {
+                    const existingImage = user.imageUrl.images[0];
+                    const imagePath = `./uploads/${existingImage}`;
+                    if (fs.existsSync(imagePath)) {
+                        fs.unlinkSync(imagePath);
+                    }
+                }
+
+                // Save the new image in the user's folder
+                const folderName = user.folderName;
+                const uploadPath = `./uploads/${folderName}`;
+                fs.renameSync(file.path, `${uploadPath}/${file.filename}`);
+
+                // Update the image name in the database
+                user.clearImageUrl();
+                user.addImageUrl(`${file.filename}`);
+                await user.save();
+
+                return { success: true };
+            } else {
+                return { success: false, message: 'No image provided' };
+            }
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+};
+
+
+module.exports = UserRepositry;

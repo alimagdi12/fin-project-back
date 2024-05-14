@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
-    name: {
+    title: {
         type: String,
         required: [
             true,
@@ -15,7 +15,7 @@ const ProductSchema = new Schema({
         ],
         maxlength: [
             20,
-            'First name must be less than 15 letters'
+            'First name must be less than 25 letters'
         ]
     },
     status: {
@@ -32,6 +32,13 @@ const ProductSchema = new Schema({
                     "you must enter at least one image"
                 ],
             }
+        ]
+    },
+    folderName: {
+        type: String,
+        required: [
+            true,
+            "you must enter a folder name"
         ]
     },
     addingDate: {
@@ -104,5 +111,25 @@ const ProductSchema = new Schema({
 
 
 })
+
+
+ProductSchema.methods.addImageUrl = async function(imageUrl) {
+    this.imagesUrl.images.push(imageUrl);
+    // await this.save(); // Save the document after all images are added
+    // return this;
+};
+
+
+ProductSchema.methods.deleteImageUrl = function(imageUrl) {
+    this.imagesUrl.images = this.imagesUrl.images.filter(img => img !== imageUrl);
+    return this.save();
+};
+
+ProductSchema.methods.clearImageUrl = function() {
+    this.imagesUrl.images = [];
+    // return this.save();
+};
+
+
 
 module.exports = mongoose.model('Product', ProductSchema);

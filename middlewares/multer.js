@@ -7,9 +7,10 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = './uploads/'; // Base upload path
         const firstName = req.body.firstName;
+        const productName = req.body.title;
         // Create a dynamic folder name based on current date
-        const folderName = firstName + new Date().toISOString().split('T')[0];
-        const fullPath = path.join(uploadPath, folderName);
+        const folderName = (firstName ? firstName : productName) + new Date().toISOString().split('T')[0];
+        const fullPath = path.join(uploadPath, (firstName ? folderName : folderName.split(' ').join('-')));
         if (!fs.existsSync(fullPath)) {
             fs.mkdirSync(fullPath, { recursive: true });
         }

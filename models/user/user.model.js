@@ -87,10 +87,7 @@ const UserSchema = new Schema({
     },
     folderName: {
         type: String,
-            required: [
-                true,
-                'folder name must be provided'
-            ]
+            required: false
     },
     role: {
         type: Schema.Types.ObjectId,

@@ -5,7 +5,14 @@ const upload = require('../../middlewares/multer');
 
 const productRouter = (productsController) => {
 
-    
+    router.post('/add-product', async (req, res, next) => {
+        try {
+            await upload.uploadImage(req, res);
+            productsController.addProduct(req, res, next);
+        }catch (err) {
+            next(err);
+        }
+    })
 
 
 

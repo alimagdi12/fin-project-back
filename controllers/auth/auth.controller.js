@@ -67,66 +67,7 @@ class AuthController {
         }
     }
 
-    async editUser(req, res, next) {
-        try {
-            const token = req.headers['jwt'];
-            const result = await this.authRepositry.editUser(req.body, token);
-            res.status(201).json({ message: 'user edited successfully', result });
-        } catch (error) {
-            console.log(error);
-            res.status(401).json({ msg: 'failed to edit user', error: error.message });
-        }
-    }
-
-    async deleteUser(req, res, next) {
-        try {
-            const token = req.headers['jwt'];
-            const result = await this.authRepositry.deleteUser(token);
-            res.status(201).json({ message: 'user deleted successfully', result });
-        } catch (err) {
-            console.log(err);
-            res.status(200).json({ msg: err.message })
-        }
-    }
-
-    async updateUserImage(req, res, next) {
-        try {
-            const token = req.headers['jwt'];
-            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
-            const email = decodedToken.email;
-            const user = await User.findOne({ email });
-
-            if (user && req.files && req.files.length > 0) {
-                const file = req.files[0];
-
-                // If the user has an existing image, delete it
-                if (user.imageUrl && user.imageUrl.images && user.imageUrl.images.length > 0) {
-                    const existingImage = user.imageUrl.images[0];
-                    const imagePath = `./uploads/${existingImage}`;
-                    if (fs.existsSync(imagePath)) {
-                        fs.unlinkSync(imagePath);
-                    }
-                }
-
-                // Save the new image in the user's folder
-                const folderName = user.folderName;
-                const uploadPath = `./uploads/${folderName}`;
-                fs.renameSync(file.path, `${uploadPath}/${file.filename}`);
-
-                // Update the image name in the database
-                user.clearImageUrl();
-                user.addImageUrl(`${file.filename}`);
-                // await user.save();
-
-                res.status(201).json({ message: 'user image updated successfully' });
-            } else {
-                res.status(400).json({ message: 'No user found or no image provided' });
-            }
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: 'Error updating image', error: err.message });
-        }
-    }
+    
 }
 
 module.exports = AuthController;
