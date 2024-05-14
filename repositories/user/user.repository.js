@@ -4,6 +4,7 @@ require("dotenv").config();
 const Email = require('../../middlewares/email');
 const User = require("../../models/user/user.model");
 const UserRole = require('../../models/userRole/userRole.model');
+const fs = require('fs');
 
 class UserRepositry {
     constructor() { };
@@ -84,7 +85,6 @@ class UserRepositry {
                 // Update the image name in the database
                 user.clearImageUrl();
                 user.addImageUrl(`${file.filename}`);
-                await user.save();
 
                 return { success: true };
             } else {

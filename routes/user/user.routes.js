@@ -15,13 +15,17 @@ const userRouter = (userController) => {
         }
     });
     
-    router.post('/login', (req, res, next) => {
-        try{
-            userController.postLogin(req, res, next);
+    router.put('/edit-user', (req, res, next) => {
+        try {
+
+            userController.editUser(req, res, next);
+            
         } catch (err) {
             next(err)
-        };
+        }
     });
+
+    
     
     router.put('/edit-user-image', async (req, res, next) => {
         try {

@@ -78,7 +78,22 @@ class ProductRepositry{
         } catch (err) {
             throw err;
         }
+    }
+
+
+    async deleteProduct(id,token) {
+        try {
+            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+            const userId = decodedToken.id;
+            const productAdminId = await Product.findById(id).userId;
+            if (userId === productAdminId) {
+                const product = await Product.findByIdAndDelete(id);
+                return product
+            }
+        } catch (err) {
+            throw err
         }
+    }
 
 }
 

@@ -59,6 +59,19 @@ class ProductController {
         }
     }
 
+    async deleteProduct(req, res, next) {
+        try {
+            const productId = req.params.id;
+            const token = req.headers['jwt'];
+            const product = await this.productRepository.deleteProduct(productId, token);
+            res.status(201).json({msg:"product deleted successfully ", product})
+            
+        } catch (err) {
+            console.error(err);
+            res.status(501).json({ msg: "failed to delete product", err: err.message });
+        }
+    }
+
 }
 
 module.exports = ProductController;

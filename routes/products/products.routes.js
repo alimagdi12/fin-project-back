@@ -39,6 +39,14 @@ const productRouter = (productsController) => {
         }
     });
 
+    router.delete('/delete-product/:id', async (req, res, next) => {
+        try {
+            await productsController.deleteProduct(req, res, next);
+        } catch (err) {
+            next(err);
+        }
+    })
+
     return router;
     
 }
