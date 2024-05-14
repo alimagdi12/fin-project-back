@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const upload = require('../../middlewares/multer');
 
 
 const categoryRouter = (categoryController) => {
 
-    router.post('/add-category', (req, res, next) => {
-        try{
-            categoryController.addCategory(req, res, next);
+    router.post('/add-category', async (req, res, next) => {
+        try {
+            await upload.uploadImage(req, res);
+            await categoryController.addCategory(req, res, next);
         } catch (err) {
             next(err);
         };

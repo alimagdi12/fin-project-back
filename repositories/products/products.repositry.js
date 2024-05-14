@@ -43,7 +43,43 @@ class ProductRepositry{
         }
         
     }
+
+
+    async getProducts() {
+        try {
+            const products = await Product.find().populate('status userId categoryId subCategoryId').exec();
+            return products;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+
+    async getProductById(id) {
+        try {
+            const product = await Product.findById(id);
+            return product;
+        } catch (err) {
+            throw err;
+        }
+    }
     
+
+
+    async editProduct(productData, token, id) {
+        try {
+            const { updatedTitle, updatedQuantity, updatedPrice } = productData;
+            const product = await Product.findById(id);
+            product.title = updatedTitle;
+            product.quantity = updatedQuantity;
+            product.price = updatedPrice;
+            await product.save();
+            return product;
+        } catch (err) {
+            throw err;
+        }
+        }
+
 }
 
 

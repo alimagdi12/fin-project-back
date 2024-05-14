@@ -9,8 +9,40 @@ const CategorySchema = new Schema({
             true,
             'Please enter a category name'
         ]
-    }
+    },
+    imageUrl: {
+        images: [
+            {
+                type: String,
+                required: [
+                    false
+                ],
+            }
+        ]
+    },
+    folderName: {
+        type: String,
+        required: false
+    },
 })
+
+
+
+CategorySchema.methods.addImageUrl = function(imageUrl) {
+    this.imageUrl.images.push(imageUrl);
+    return this.save();
+};
+
+CategorySchema.methods.deleteImageUrl = function(imageUrl) {
+    this.imageUrl.images = this.imageUrl.images.filter(img => img !== imageUrl);
+    return this.save();
+};
+
+CategorySchema.methods.clearImageUrl = function() {
+    this.imageUrl.images = [];
+    // return this.save();
+};
+
 
 
 module.exports = mongoose.model('Category', CategorySchema);

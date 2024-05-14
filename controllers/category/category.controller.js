@@ -1,3 +1,5 @@
+const Category = require('../../models/category/category.model');
+
 class CategoryController{
     constructor(categoryRepository) {
         this.categoryRepository = categoryRepository;
@@ -7,6 +9,13 @@ class CategoryController{
         try {
             const { category } = req.body;
             const newCategory = await this.categoryRepository.addCategory(category);
+            const categories = await Category.findOne({ title: category });
+            if (categories && req.files && req.files.length > 0) {
+                if (!categories.imageUrl) {
+                    categories.imageUrl = { images: [] };
+                }
+                categories.addImageUrl(req.files[0].filename);
+            }
             res.status(201).json({ message: 'category created successfully', category: newCategory });
 
         } catch (err) {

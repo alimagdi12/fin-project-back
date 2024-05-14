@@ -6,7 +6,13 @@ class CategoryRepository{
 
 
     async addCategory(title) {
-        const newCategory = new Category({ title });
+        const folderName = title + new Date().toISOString().split('T')[0];
+        const newCategory = new Category({
+            title,
+            imageUrl: { images: [] },
+            folderName,
+
+        });
         await newCategory.save();
         return newCategory
     };
