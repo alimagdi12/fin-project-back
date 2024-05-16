@@ -8,26 +8,29 @@ const categoryRouter = (categoryController) => {
     router.post('/add-category', async (req, res, next) => {
         try {
             await upload.uploadImage(req, res);
-            await categoryController.addCategory(req, res, next);
+            const category = await categoryController.addCategory(req.body, req.files);
+            res.status(200).json(category)
         } catch (err) {
-            next(err);
+            res.status(400).json(category);
         };
         
     });
 
-    router.get('/categories', (req, res, next) => {
+    router.get('/categories',async (req, res, next) => {
         try {
-            categoryController.getCategories(req,res,next)
+            const categories = await categoryController.getCategories();
+            res.status(200).json(categories);
         } catch (err) {
-            next(err)
+            res.status(400).json({err:err.message,categories});
         }
     })
 
-    router.delete('/delete-category/:id', (req, res, next) => {
+    router.delete('/delete-category/:id',async (req, res, next) => {
         try {
-            categoryController.deleteCategory(req, res, next)
+            const category = await categoryController.deleteCategory(req.params.id);
+            res.status(200).json(category);
         } catch (err) {
-            next(err)
+            res.status(400).json({err:err.message,categories});
         }
     })
     

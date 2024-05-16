@@ -11,6 +11,7 @@ class AuthRepositry {
     // Function to sign up a new user
     async signup(userData) {
         try {
+            // console.log(userData);
             const { firstName, lastName, birthDay, email, phoneNumber, password, confirmPassword } = userData;
 
             // Check if passwords are provided and match

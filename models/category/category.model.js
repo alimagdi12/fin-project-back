@@ -9,13 +9,15 @@ const CategorySchema = new Schema({
             true,
             'Please enter a category name'
         ]
+        ,
+        unique: true
     },
     imageUrl: {
         images: [
             {
                 type: String,
                 required: [
-                    false
+                    true
                 ],
             }
         ]

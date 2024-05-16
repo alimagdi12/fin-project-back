@@ -9,6 +9,7 @@ class AuthController {
     // Function to handle user signup
     async postSignup(body, files) {
         try {
+            console.log(body);
             const result = await this.authRepositry.signup(body);  // Call repository to signup user
 
             const user = await this.authRepositry.findUserByEmailAndAddImage(body.email, files);  // Add image to user profile
@@ -33,7 +34,7 @@ class AuthController {
 
         } catch (err) {
             console.error(err);
-            return { msg:"user failed to login successfully"};  // Return error message if login fails
+            return { msg:"user failed to login "};  // Return error message if login fails
         }
     }   
 }

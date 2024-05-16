@@ -16,7 +16,7 @@ const authRouter = (authController) => {
             await upload.uploadImage(req, res);
 
             // Call postSignup method in AuthController and capture the return value
-            const signupResult = await authController.postSignup(body,files);
+            const signupResult = await authController.postSignup(req.body,req.files);
 
             // Send the result in the response
             res.status(200).json(signupResult);
