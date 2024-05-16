@@ -1,7 +1,7 @@
 const http = require('http');
 const geoip = require('geoip-lite');
 
-const getPublicIpMiddleware = (req, res, next) => {
+const getPublicIpMiddleware = (req, res, lang, next) => {
     http.get('http://api.ipify.org', (resp) => {
         let data = '';
         resp.on('data', (chunk) => {

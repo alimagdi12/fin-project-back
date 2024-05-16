@@ -4,7 +4,8 @@ const connect = require('./db/connection')
 const PORT = process.env.PORT;
 const app = express();
 const requestIp = require('request-ip');
-
+const cors = require('cors');
+app.use(cors());
 
 // calling AuthRespositry and AuthController
 const AuthRespositry = require('./repositories/auth/auth.repositry');
