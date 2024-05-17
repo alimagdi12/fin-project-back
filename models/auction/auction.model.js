@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const AuctionSchema = new Schema({
@@ -9,32 +8,23 @@ const AuctionSchema = new Schema({
         default: Date.now
     },
     expirationDate: {
-        type: String,
-        required: [
-            true, "you must enter an expiration date"
-        ]
+        type: Date,
+        required: true
     },
     bidId: {
         type: Schema.Types.ObjectId,
         ref: 'Bid',
-        required: [
-            true, 'a bid amout must be entered'
-        ],
+        required: false,
     },
-    creatorId: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: [
-            true, 'a creator must be entered'
-        ]
+        required: true
     },
     productId: {
         type: String,
-        required: [
-            true,
-            'a product must be entered'
-            ]
+        required: true
     }
-})
+});
 
 module.exports = mongoose.model('Auction', AuctionSchema);

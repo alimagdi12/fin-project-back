@@ -1,11 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
+const auctionRouter = (auctionController) => {
+    router.post('/add-auction', async (req, res, next) => {
+        try {
+            const token = req.headers['jwt'];
+            const auction = await auctionController.addAuction(req.body, token);
+            res.status(201).json(auction);
+        } catch (err) {
+            res.status(401).json(auction);
+        }
+    });
 
-router.get('/', (req, res, next) => {
-    console.log("auction started successfully");
-})
+    return router;
+}
 
-
-
-module.exports = router;
+module.exports = auctionRouter;
