@@ -1,74 +1,59 @@
-const Product = require('../../models/products/product.model');
 class ProductController {
     constructor(productRepository) {
         this.productRepository = productRepository;
     }
 
-    async addProduct(req, res, next) {
+    async addProduct(token,body,files) {
         try {
-            const token = req.headers['jwt'];
-            const productData = req.body;
-            const images = req.files.map(file => file.filename); 
-            const product = await this.productRepository.addProduct(productData, token);
-            const products = await Product.findOne({ title: req.body.title });
-            images.forEach(async image => {
-                await products.addImageUrl(image);
-            });
-            await products.save();
-            res.status(201).json({ msg: 'product added successfully', product });
+            const result = await this.productRepository.addProduct(body, token,files);
+            
+            return { msg: 'product added successfully', result };
         } catch (err) {
             console.error(err);
-            res.status(500).json({ msg: "failed to add product", err: err.message });
+            return { msg: "failed to add product", err: err.message };
         }
     }
 
 
-    async getProducts(req, res, next) {
+    async getProducts() {
         try {
             const products = await this.productRepository.getProducts();
-            res.status(200).json({ msg: 'products fetched successfully', products });
+            return { msg: 'products fetched successfully', products };
         } catch (err) {
             console.error(err);
-            res.status(500).json({ msg: "failed to get products", err: err.message });
+            return { msg: "failed to get products", err: err.message };
         }
     }
 
 
-    async getProductById(req, res, next) {
+    async getProductById(id) {
         try {
-            const productId = req.params.id;
-            const product = await this.productRepository.getProductById(productId);
-            res.status(200).json({ msg: 'product fetched successfully', product });
+            const product = await this.productRepository.getProductById(id);
+            return { msg: 'product fetched successfully', product };
         } catch (err) {
             console.error(err);
-            res.status(500).json({ msg: "failed to get product", err: err.message });
+            return { msg: "failed to get product", err: err.message };
         }
     }
 
 
-    async editProduct(req, res, next) {
+    async editProduct(id, body, token) {
         try {
-            const productId = req.params.id;
-            const productData = req.body;
-            const token = req.headers['jwt'];
-            const product = await this.productRepository.editProduct(productData, token, productId);
-            res.status(200).json({msg:"product edited successfully",product})
+            const product = await this.productRepository.editProduct(id , body ,token);
+            return { msg: "product edited successfully", product };
         } catch (err) {
             console.error(err);
-            res.status(501).json({ msg: "failed to edit product", err: err.message });
+            return { msg: "failed to edit product", err: err.message };
         }
     }
 
-    async deleteProduct(req, res, next) {
+    async deleteProduct(id,token) {
         try {
-            const productId = req.params.id;
-            const token = req.headers['jwt'];
-            const product = await this.productRepository.deleteProduct(productId, token);
-            res.status(201).json({msg:"product deleted successfully ", product})
-            
+            const product = await this.productRepository.deleteProduct(id, token);
+            return { msg: "product deleted successfully ", product };
         } catch (err) {
             console.error(err);
-            res.status(501).json({ msg: "failed to delete product", err: err.message });
+            return { msg: "failed to delete product", err: err.message };
         }
     }
 

@@ -6,45 +6,63 @@ class CategoryRepository{
 
 
     async addCategory(body) {
-        const folderName = body.title + new Date().toISOString().split('T')[0];
+        try {
+            const folderName = body.title + new Date().toISOString().split('T')[0];
+            // Check if user already exists
+            const existingCategory = await Category.findOne({ title:body.title });
+                if (existingCategory) {
+                    throw new Error('categoty already exists');
+            }
+            
+            const newCategory = await new Category({
+                title: body.title,
+                imageUrl:{images:[]},
+                folderName,
+            });
+            await newCategory.save();
+            return newCategory
 
-
-        // Check if user already exists
-        const existingCategory = await Category.findOne({ title:body.title });
-            if (existingCategory) {
-                throw new Error('categoty already exists');
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
         }
-        
-
-        const newCategory = await new Category({
-            title: body.title,
-            imageUrl:{images:[]},
-            folderName,
-        });
-        await newCategory.save();
-        return newCategory
     };
     
-    async getCategoryByNameAndAddImage(title,files) {
-        const category = await Category.findOne({ title });
-            if (category && files && files.length > 0) {
-                if (!category.imageUrl ) {
-                    category.imageUrl = { images: [] };
-                }
-                category.addImageUrl(files[0].filename);
-                return category
+    async getCategoryByNameAndAddImage(title, files) {
+        try { 
+            const category = await Category.findOne({ title });
+                if (category && files && files.length > 0) {
+                    if (!category.imageUrl ) {
+                        category.imageUrl = { images: [] };
+                    }
+                    category.addImageUrl(files[0].filename);
+                    return category
+            }
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
         }
     }
 
 
     async getCategories() { 
-        const categories = await Category.find();
-        return categories;
+        try { 
+            const categories = await Category.find();
+            return categories;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
+        }
     }
 
     async deleteCategory(id) {
-        const category = await Category.findByIdAndDelete(id);
-        return category;
+        try { 
+            const category = await Category.findByIdAndDelete(id);
+            return category;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
+        }
     }
 };
 

@@ -28,7 +28,7 @@ const ProductSchema = new Schema({
             {
                 type: String,
                 required: [
-                    true,
+                    false,
                     "you must enter at least one image"
                 ],
             }
