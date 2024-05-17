@@ -6,12 +6,12 @@ const fs = require('fs');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = './uploads/'; // Base upload path
-        const firstName = req.body.firstName;
+        const email = req.body.email;
         const productName = req.body.title;
         const category = req.body.category;
         // Create a dynamic folder name based on current date
-        const folderName = (firstName ? firstName : (productName ? productName : category)) + new Date().toISOString().split('T')[0];
-        const fullPath = path.join(uploadPath, (firstName ? folderName : folderName.split(' ').join('-')));
+        const folderName = (email ? email : (productName ? productName : category)) + new Date().toISOString().split('T')[0];
+        const fullPath = path.join(uploadPath, (email ? folderName : folderName.split(' ').join('-')));
         if (!fs.existsSync(fullPath)) {
             fs.mkdirSync(fullPath, { recursive: true });
         }

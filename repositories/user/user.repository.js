@@ -34,7 +34,7 @@ class UserRepositry {
             return user;
         } catch (err) {
             console.log(err);
-            throw err;
+            throw new Error(err) ;
         }
     }
 
@@ -52,7 +52,7 @@ class UserRepositry {
             return user;
         } catch (err) {
             console.log(err);
-            throw err;
+            throw new Error(err);
         }
     }
 
@@ -86,13 +86,13 @@ class UserRepositry {
                 user.clearImageUrl();
                 user.addImageUrl(`${file.filename}`);
 
-                return { success: true };
+                return { success: true, user };
             } else {
                 return { success: false, message: 'No image provided' };
             }
         } catch (err) {
             console.log(err);
-            throw err;
+            throw new Error(err);
         }
     }
 

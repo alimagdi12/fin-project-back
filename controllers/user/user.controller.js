@@ -11,36 +11,33 @@ class UserController {
     }
 
 
-    async editUser(req, res, next) {
+    async editUser(body,token) {
         try {
-            const token = req.headers['jwt'];
-            const result = await this.userRepositry.editUser(req.body, token);
-            res.status(201).json({ message: 'user edited successfully', result });
+            const result = await this.userRepositry.editUser(body, token);
+            return { message: 'user edited successfully', result };
         } catch (error) {
             console.log(error);
-            res.status(401).json({ msg: 'failed to edit user', error: error.message });
+            return { msg: 'failed to edit user', error: error.message };
         }
     }
 
-    async deleteUser(req, res, next) {
+    async deleteUser(token) {
         try {
-            const token = req.headers['jwt'];
             const result = await this.userRepositry.deleteUser(token);
-            res.status(201).json({ message: 'user deleted successfully', result });
+            return { message: 'user deleted successfully', result };
         } catch (err) {
             console.log(err);
-            res.status(200).json({ msg: err.message })
+            return { msg: err.message };
         }
     }
 
-    async updateUserImage(req, res, next) {
+    async updateUserImage(files,token) {
         try {
-            const token = req.headers['jwt'];
-            const result = await this.userRepositry.updateUserImage(token, req.files);
-            res.status(201).json({ message: 'user image updated successfully', result });
+            const result = await this.userRepositry.updateUserImage(token,files);
+            return { message: 'user image updated successfully', result } ;
         } catch (err) {
             console.error(err);
-            res.status(500).json({ msg: 'Error updating image', error: err.message });
+            return { msg: 'Error updating image', error: err.message };
         }
     }
 }

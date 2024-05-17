@@ -41,7 +41,7 @@ class AuthRepositry {
             }
 
             // Create a new user
-            const folderName = firstName + new Date().toISOString().split('T')[0];
+            const folderName = email + new Date().toISOString().split('T')[0];
             const user = new User({
                 firstName,
                 lastName,

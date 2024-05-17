@@ -5,23 +5,23 @@ const upload = require('../../middlewares/multer');
 
 const userRouter = (userController) => {
     
-    router.delete('/delete-user', (req, res, next) => {
+    router.delete('/delete-user', async (req, res, next) => {
         try {
-            
-            userController.deleteUser(req, res, next);
-
+            const token = req.headers['jwt'];
+            const deletedUser = await userController.deleteUser(token);
+            res.status(200).json(deletedUser);
         } catch (err) {
-            next(err)
+            res.status(400).json(deletedUser);
         }
     });
     
-    router.put('/edit-user', (req, res, next) => {
+    router.put('/edit-user', async (req, res, next) => {
         try {
-
-            userController.editUser(req, res, next);
-            
+            const token = req.headers['jwt'];
+            const editedUser = await userController.editUser(req.body, token);
+            res.status(200).json(editedUser);
         } catch (err) {
-            next(err)
+            res.status(400).json(editedUser)
         }
     });
 
@@ -29,14 +29,16 @@ const userRouter = (userController) => {
     
     router.put('/edit-user-image', async (req, res, next) => {
         try {
+            const token = req.headers['jwt'];
+
             // Wait for the file upload to complete
             await upload.uploadImage(req, res);
     
             // Proceed to postSignup
-            await userController.updateUserImage(req, res, next);
+            const updatedUser = await userController.updateUserImage(req.files, token);
+            res.status(200).json(updatedUser);
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: 'Failed to edit user image ', error: err.message });
+            res.status(500).json(updatedUser);
         }
     });
 
