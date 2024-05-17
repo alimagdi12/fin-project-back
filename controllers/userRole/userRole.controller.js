@@ -3,14 +3,13 @@ class UserRoleController {
         this.userRoleRepository = userRoleRepository
     };
 
-    async createRole(req, res, next) {
+    async createRole(body) {
         try {
-            const { role } = req.body;
-            const newRole = await this.userRoleRepository.createRole(role);
-            res.status(201).json({ message: 'Role created successfully', role: newRole });
+            const newRole = await this.userRoleRepository.createRole(body);
+            return { message: 'Role created successfully', role: newRole };
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Failed to create role', error: error.message });
+            return { message: 'Failed to create role', error: error.message };
         }
     }
 }

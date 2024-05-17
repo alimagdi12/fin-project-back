@@ -7,10 +7,10 @@ const userRoleRouter = (userRoleController) => {
     router.post('/addRole', async (req, res, next) => {
         try {
 
-            await userRoleController.createRole(req, res, next);
-
+            const userRole = await userRoleController.createRole(req.body);
+            res.status(201).json(userRole);
         } catch (err) {
-            next(err)
+            res.status(401).json(userRole)
         }
     });
 
