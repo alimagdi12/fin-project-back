@@ -4,11 +4,12 @@ const router = express.Router();
 
 const productStatusRouter = (productStatusController) => {
 
-    router.post('/addStatus', (req, res, next) => {
+    router.post('/addStatus', async (req, res, next) => {
         try{
-            productStatusController.createStatus(req, res, next);
+            const newStatus = await productStatusController.createStatus(req.body);
+            res.status(201).json(newStatus);
         } catch (err) {
-            next(err);
+            res.status(401).json(newStatus)
         };
         
     });

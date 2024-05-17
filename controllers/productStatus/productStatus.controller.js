@@ -3,14 +3,13 @@ class ProductStatusController{
         this.productStatusRepository = productStatusRepository;
     };
 
-    async createStatus(req, res, next) {
+    async createStatus(body) {
         try {
-            const { status } = req.body;
-            const newStatus = await this.productStatusRepository.createStatus(status);
-            res.status(201).json({ message: 'Product Status created successfully', status: newStatus });
+            const newStatus = await this.productStatusRepository.createStatus(body);
+            return { message: 'Product Status created successfully', status: newStatus };
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Failed to create product status', error: error.message });
+            return { message: 'Failed to create product status', error: error.message };
         }
     }
 }

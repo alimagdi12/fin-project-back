@@ -4,28 +4,31 @@ const router = express.Router();
 
 const subCategoryRouter = (subCategoryController) => {
 
-    router.post('/add-subcategory', (req, res, next) => {
+    router.post('/add-subcategory', async (req, res, next) => {
         try{
-            subCategoryController.addSubCategory(req, res, next);
+            const subCategory = await subCategoryController.addSubCategory(req.body);
+            res.status(200).json(subCategory);
         } catch (err) {
-            next(err);
+            res.status(400).json(subCategory);
         };
         
     });
 
-    router.get('/subcategories', (req, res, next) => {
+    router.get('/subcategories', async (req, res, next) => {
         try {
-            subCategoryController.getCategories(req,res,next)
+            const subCategories = await subCategoryController.getCategories();
+            res.status(200).json(subCategories);
         } catch (err) {
-            next(err)
+            res.status(400).json(subCategories);
         }
     })
 
-    router.delete('/delete-subcategory/:id', (req, res, next) => {
+    router.delete('/delete-subcategory/:id',async (req, res, next) => {
         try {
-            subCategoryController.deleteSubCategory(req, res, next);
+            const deletedSubCategory = await subCategoryController.deleteSubCategory(req.params.id);
+            res.status(200).json(deletedSubCategory);
         } catch (err) {
-            next(err);
+            res.status(400).json(deletedSubCategory);
         }
     });
     

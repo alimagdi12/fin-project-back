@@ -5,15 +5,17 @@ class SubCategoryRepository{
     constructor() { };
 
 
-    async addSubCategory(title, categoryName) {
-    const categories = await Category.findOne({ title:categoryName });
-    if (!categories) {
-        throw new Error('Category not found');
-    }
-    const categoryId = categories._id;
-    const newSubCategory = new SubCategory({ title, categoryId });
-    await newSubCategory.save();
-    return newSubCategory;
+    async addSubCategory(body) {
+        const categoryName = body.categoryName;
+        const title = body.title;
+        const categories = await Category.findOne({ title:categoryName });
+        if (!categories) {
+            throw new Error('Category not found');
+        }
+        const categoryId = categories._id;
+        const newSubCategory = new SubCategory({ title, categoryId });
+        await newSubCategory.save();
+        return newSubCategory;
 };
 
     
