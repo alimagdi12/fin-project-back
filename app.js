@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 require('dotenv').config();
 const connect = require('./db/connection')
 const PORT = process.env.PORT;
@@ -6,6 +7,10 @@ const app = express();
 const requestIp = require('request-ip');
 const cors = require('cors');
 app.use(cors());
+const server = http.createServer(app);
+
+
+
 
 // calling AuthRespositry and AuthController
 const AuthRespositry = require('./repositories/auth/auth.repositry');
@@ -66,12 +71,16 @@ const userRoleRoutes = require('./routes/userRole/userRole.routes');
 const categoryRoutes = require('./routes/category/category.routes');
 const subCategoryRoutes = require('./routes/subCategory/subCategory.routes');
 const userRoutes = require('./routes/user/user.routes');
+
 // Middleware to get client's IP address
 app.use(requestIp.mw());
 
 app.use(express.json());
 
-
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+})
 
 // executing the routes 
 app.use("/api/v1/auth", [authRoutes(authController),userRoutes(userController)]);
@@ -83,6 +92,8 @@ app.use('/api/v1/admin', [
         subCategoryRoutes(subcategoryController)
     ]
 );
+
+
 
 connect
     .connection
