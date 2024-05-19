@@ -11,24 +11,25 @@ const BidSchema = new Schema({
     amount: {
         type: Number,
         required: [true, "An amount must be provided"],
-        default: function() {
-            return this.initialValue; 
-        }
     },
     auctionId: {
         type: Schema.Types.ObjectId,
         ref: 'Auction',
-        required: [true, "An auction must be provided"]
+        required: false
     },
     createdAt: {
         type: Date,
         required: [true, "A date must be entered"],
         default: Date.now,
     },
-    initialValue: {
-        type: Number,
-        required: [true, "An initial value must be entered"]
-    }
+    
 });
+
+BidSchema.methods.setAuctionId = function(auctionId) {
+    this.auctionId = auctionId;
+    return this.save();
+};
+
+
 
 module.exports = mongoose.model('Bid', BidSchema);

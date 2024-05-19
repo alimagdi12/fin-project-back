@@ -1,5 +1,3 @@
-const { BOOLEAN } = require("sequelize");
-
 class SubCategoryController{
     constructor(subCategoryRepository) {
         this.subCategoryRepository = subCategoryRepository;

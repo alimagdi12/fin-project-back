@@ -5,12 +5,26 @@ const connect = require('./db/connection')
 const PORT = process.env.PORT;
 const app = express();
 const requestIp = require('request-ip');
+const socket = require('socket.io');
 const cors = require('cors');
-app.use(cors());
+
 const server = http.createServer(app);
 
+const io = socket(server,{
+  cors: {
+    origin: "*", // Allow all origins (adjust as needed)
+    methods: ["GET", "POST"]
+  }
+});
 
+io.on('connection', (connection) => {
+    console.log('a connection started', connection.id);
+});
 
+app.use(cors({
+    origin: 'http://127.0.0.1:5500/',
+    methods: ['GET', 'POST']
+}));
 
 // calling AuthRespositry and AuthController
 const AuthRespositry = require('./repositories/auth/auth.repositry');
@@ -36,6 +50,11 @@ const UserController = require('./controllers/user/user.controller');
 // calling AuctionRepository and AuctionController
 const AuctionRepository = require('./repositories/auction/auction.repository');
 const AuctionController = require('./controllers/auction/auction.controller');
+// calling BidRepository and BidController
+const BidRepository = require('./repositories/bid/bid.repository');
+const BidController = require('./controllers/bid/bid.controllers');
+
+
 
 
 
@@ -65,6 +84,10 @@ const userController = new UserController(userRepository);
 // Create instances of AuctionRepository and AuctionController
 const auctionRepository = new AuctionRepository();
 const auctionController = new AuctionController(auctionRepository);
+// Create instances of BidRepository and BidController
+const bidRepository = new BidRepository(io);
+const bidController = new BidController(bidRepository);
+
 
 
 
@@ -78,31 +101,29 @@ const categoryRoutes = require('./routes/category/category.routes');
 const subCategoryRoutes = require('./routes/subCategory/subCategory.routes');
 const userRoutes = require('./routes/user/user.routes');
 const auctionRoutes = require('./routes/auction/aucttion.routes');
+const bidRoutes = require('./routes/bid/bid.routes');
+
+
 
 // Middleware to get client's IP address
 app.use(requestIp.mw());
-
 app.use(express.json());
 
-
-
 // executing the routes 
-app.use("/api/v1/auth", [authRoutes(authController),userRoutes(userController)]);
+app.use("/api/v1/auth", [authRoutes(authController), userRoutes(userController),bidRoutes(bidController)]);
 app.use("/api/v1/products", productsRoutes(productController));
-app.use('/api/v1', [productStatusRoutes(productStatusController),auctionRoutes(auctionController)]);
+app.use('/api/v1', [productStatusRoutes(productStatusController), auctionRoutes(auctionController)]);
 app.use('/api/v1/admin', [
-        userRoleRoutes(userRoleController),
-        categoryRoutes(categoryController),
-        subCategoryRoutes(subcategoryController)
-    ]
-);
+    userRoleRoutes(userRoleController),
+    categoryRoutes(categoryController),
+    subCategoryRoutes(subcategoryController)
+]);
 
-
-
-connect
-    .connection
+connect.connection
     .then(result => {
-        app.listen(PORT);
+        server.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
     })
     .catch(err => {
         console.log(err);

@@ -11,11 +11,11 @@ const AuctionSchema = new Schema({
         type: Date,
         required: true
     },
-    bidId: {
+    bidsId: [{
         type: Schema.Types.ObjectId,
         ref: 'Bid',
         required: false,
-    },
+    }],
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -23,8 +23,24 @@ const AuctionSchema = new Schema({
     },
     productId: {
         type: String,
-        required: true
+        required: true,
+        unique: true
+    },
+    initialValue: {
+        type: Number,
+        required: [true, "An initial value must be entered"]
     }
 });
+
+
+AuctionSchema.methods.addBidId = function(bidId) {
+    this.bidsId.push(bidId);
+    return this.save();
+};
+
+AuctionSchema.methods.deleteBidId = function(bidId) {
+    this.bidsId = this.bidsId.filter(id => id !== bidId);
+    return this.save();
+};
 
 module.exports = mongoose.model('Auction', AuctionSchema);

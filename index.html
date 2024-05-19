@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Updates</title>
+</head>
+<body>
+    <h1>Auction Updates</h1>
+    <h3 id="auction-updates"></h3>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+
+    <script>
+        // Initialize the socket connection
+        const socket = io('http://localhost:3000'); // Assuming your server is running on port 3000
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('newBid', (data) => {
+            console.log('New bid amount:', data.amount);
+            // Update the UI to display the new bid amount
+            document.getElementById('auction-updates').innerText = `New bid amount: $${data.amount}`;
+        });
+    </script>
+</body>
+</html>
