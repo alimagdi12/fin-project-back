@@ -53,6 +53,10 @@ const AuctionController = require('./controllers/auction/auction.controller');
 // calling BidRepository and BidController
 const BidRepository = require('./repositories/bid/bid.repository');
 const BidController = require('./controllers/bid/bid.controllers');
+// calling CartRepository and CartController
+const CartRepository = require('./repositories/cart/cart.repository');
+const CartController = require('./controllers/cart/cart.controllers');
+
 
 
 
@@ -87,6 +91,9 @@ const auctionController = new AuctionController(auctionRepository);
 // Create instances of BidRepository and BidController
 const bidRepository = new BidRepository(io);
 const bidController = new BidController(bidRepository);
+// Create instances of CartRepository and CartController
+const cartRepository = new CartRepository();
+const cartController = new CartController(cartRepository);
 
 
 
@@ -102,7 +109,7 @@ const subCategoryRoutes = require('./routes/subCategory/subCategory.routes');
 const userRoutes = require('./routes/user/user.routes');
 const auctionRoutes = require('./routes/auction/aucttion.routes');
 const bidRoutes = require('./routes/bid/bid.routes');
-
+const cartRoutes = require('./routes/cart/cart.routes');
 
 
 // Middleware to get client's IP address
@@ -110,7 +117,7 @@ app.use(requestIp.mw());
 app.use(express.json());
 
 // executing the routes 
-app.use("/api/v1/auth", [authRoutes(authController), userRoutes(userController),bidRoutes(bidController)]);
+app.use("/api/v1/auth", [authRoutes(authController), userRoutes(userController),bidRoutes(bidController),cartRoutes(cartController)]);
 app.use("/api/v1/products", productsRoutes(productController));
 app.use('/api/v1', [productStatusRoutes(productStatusController), auctionRoutes(auctionController)]);
 app.use('/api/v1/admin', [
