@@ -22,6 +22,17 @@ class AuctionRepository {
         await auction.save();
         return auction;
     }
+
+    async deleteAuction(data, token) {
+        const { auctionId } = data;
+        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+        const registeredUserId = decodedToken.userId;
+        const auction = await Auction.findById(auctionId);
+        if (!auction) throw new Error("Auction not found");
+        if (auction.userId.toString() !== registeredUserId.toString()) throw new Error("You are not the owner of this auction");
+        await auction.remove();
+        return auction;
+    }
 }
 
 module.exports = AuctionRepository;
