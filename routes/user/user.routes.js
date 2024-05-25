@@ -43,6 +43,20 @@ const userRouter = (userController) => {
     });
 
 
+
+
+    router.get('/get-user', async (req, res, next) => {
+        try {
+            const token = req.headers['jwt'];
+    
+            const User = await userController.getUser(token);
+            res.status(200).json(User);
+        } catch (err) {
+            res.status(500).json(User);
+        }
+    });
+
+
     return router;
 }
 
