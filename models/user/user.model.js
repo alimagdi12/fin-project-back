@@ -38,19 +38,11 @@ const UserSchema = new Schema({
         }
     },
     birthDay: {
-        type: Date,
+        type: String,
         required: [
             true,
             'You must enter a birthday'
-        ],
-        validate: {
-            validator: function(date) {
-                const cutoffDate = new Date();
-                cutoffDate.setFullYear(cutoffDate.getFullYear() - 18);
-                return date <= cutoffDate;
-            },
-            message: 'User must be at least 18 years old'
-        }
+        ]
     },
     email: {
         type: String,

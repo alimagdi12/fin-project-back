@@ -43,6 +43,7 @@ class BidRepository {
 
         return newBid;
     }
+    
 }
 
 module.exports = BidRepository;
