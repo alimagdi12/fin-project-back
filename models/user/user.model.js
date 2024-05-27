@@ -105,6 +105,10 @@ const UserSchema = new Schema({
                 required: true
             }
         ]
+    },
+    userSocketId: {
+        type: String,
+        required: false
     }
 });
 

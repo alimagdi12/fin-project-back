@@ -83,7 +83,7 @@ const categoryController = new CategoryController(categoryRepository);
 const subcategoryRepository = new SubcategoryRepository();
 const subcategoryController = new SubcategoryController(subcategoryRepository);
 // Create instances of userRepository and userController
-const userRepository = new UserRepository();
+const userRepository = new UserRepository(io);
 const userController = new UserController(userRepository);
 // Create instances of AuctionRepository and AuctionController
 const auctionRepository = new AuctionRepository();

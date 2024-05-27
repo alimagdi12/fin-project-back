@@ -7,7 +7,9 @@ const UserRole = require('../../models/userRole/userRole.model');
 const fs = require('fs');
 
 class UserRepositry {
-    constructor() { };
+    constructor(io) {
+        this.io = io;
+    };
 
     async editUser(userData, token) {
         try {
