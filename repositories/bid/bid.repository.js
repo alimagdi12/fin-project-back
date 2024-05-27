@@ -43,6 +43,32 @@ class BidRepository {
 
         return newBid;
     }
+
+    async getBid(data) {
+        const productId = data.productId;
+        if (!productId) {
+            throw new Error('You must enter a product Id');
+        }
+
+        const auction = await Auction.findOne({ productId }).populate('bidsId').exec();
+        if (!auction) {
+            throw new Error(`There is no auction available with this product id ${productId}`);
+        }
+
+        const bids = auction.bidsId;
+
+        if (!bids || bids.length === 0) {
+            return [];
+        }
+
+        const highestBid = bids.reduce((maxBid, currentBid) => {
+            return currentBid.amount > maxBid.amount ? currentBid : maxBid;
+        }, bids[0]);
+
+        return highestBid;
+    }
+
+
 }
 
 module.exports = BidRepository;
