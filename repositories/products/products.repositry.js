@@ -10,47 +10,36 @@ const jwt = require("jsonwebtoken");
 class ProductRepositry{
     constructor() { }
 
-    async addProduct(productData , token , files) {
+    async addProduct(productData , token) {
         try {
-            const { title , categoryName, SubCategoryName, quantity, location, price , productStatus } = productData;
+            const { title , imagesUrl, categoryId, quantity, location, price , productStatus } = productData;
             const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
             const email = decodedToken.email;
             const user = await User.findOne({ email });
             const userId = user._id;
             const folderName = title + new Date().toISOString().split('T')[0];
-            const category = await Category.findOne({ title: categoryName });
-            const categoryId = category._id;
-            const subCategory = await SubCategory.findOne({ title: SubCategoryName });
-            const subCategoryId = subCategory._id;
+            // const category = await Category.findOne({ title: categoryName });
+            // const categoryId = category._id;
+            // const subCategory = await SubCategory.findOne({ title: SubCategoryName });
+            // const subCategoryId = subCategory._id;
             const status = await ProductStatus.findOne({ status: productStatus });
             const statusId = status._id;
-            // Check if user already exists
-            const existingImage = files.length > 0;
-            if (!existingImage) {
-                throw new Error('at least one imagemust be exists');
-            }
             const product = new Product({
                 title,
                 imagesUrl: { images:[] },
                 userId,
                 categoryId,
-                subCategoryId,
+                // subCategoryId,
                 quantity,
                 location,
                 price,
                 folderName,
                 status:statusId
             })
-            const images = files.map(file => file.filename); 
-            images.forEach(async image => {
-                await product.addImageUrl(image);
-            });
             await product.save();
-            return product;
 
         } catch (err) {
-            console.log(err);
-            throw new Error(err.message);
+            throw err;
         }
         
     }

@@ -79,14 +79,14 @@ const ProductSchema = new Schema({
             "you must enter a category"
         ]
     },
-    subCategoryId: {
-        type: Schema.Types.ObjectId,
-        ref: "SubCategory",
-        required: [
-            true,
-            "you must enter a sub category"
-        ]
-    },
+    // subCategoryId: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "SubCategory",
+    //     required: [
+    //         true,
+    //         "you must enter a sub category"
+    //     ]
+    // },
     quantity: {
         type: Number,
         required: [

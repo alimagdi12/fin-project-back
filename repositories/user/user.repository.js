@@ -11,6 +11,20 @@ class UserRepositry {
         this.io = io;
     };
 
+
+
+    async getUser(token) {
+            const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+            const email = decodedToken.email;
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new Error("User not found.");
+            }
+     return user;
+    }
+
+
+
     async editUser(userData, token) {
         try {
             const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);

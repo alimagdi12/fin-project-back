@@ -31,6 +31,19 @@ class UserController {
         }
     }
 
+
+
+async getUser(token){
+    try {
+        console.log(token);
+        const result = await this.userRepositry.getUser(token);
+        return { message: 'user fetched successfully', result } ;
+    } catch (err) {
+        console.error(err);
+        return { msg: 'Error fetching user', error: err.message };
+    }
+}
+
     async updateUserImage(files,token) {
         try {
             const result = await this.userRepositry.updateUserImage(token,files);
