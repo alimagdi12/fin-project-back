@@ -53,6 +53,26 @@ async getUser(token){
             return { msg: 'Error updating image', error: err.message };
         }
     }
+
+    async handleSocketConnection(userId, socketId) {
+        try {
+            const user = await this.userRepositry.updateSocketId(userId, socketId);
+            return user;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async handleSocketDisconnection(socketId) {
+        try {
+            const user = await this.userRepositry.removeSocketId(socketId);
+            return user;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
 }
 
 module.exports = UserController;

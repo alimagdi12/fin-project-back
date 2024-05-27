@@ -56,7 +56,13 @@ const userRouter = (userController) => {
         }
     });
 
-
+    router.post('add-socketId', async (req, res, next) => {
+        try {
+            const token = req.headers['jwt'];
+        } catch (err) {
+            res.status(500).json({ message: 'Failed to add socketId' });
+        }
+    })
     return router;
 }
 

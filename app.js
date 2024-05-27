@@ -10,6 +10,30 @@ const cors = require('cors');
 
 const server = http.createServer(app);
 
+
+const jwt = require('jsonwebtoken');
+
+const getUserIdFromToken = (socket) => {
+    return new Promise((resolve, reject) => {
+        // Extract the token from the headers
+        const token = socket.handshake.headers['jwt'];
+        
+        // Check if the token is provided
+        if (!token) {
+            return reject(new Error('No token provided'));
+        }
+
+        // Verify the token using a secret key
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return reject(new Error('Failed to authenticate token'));
+            }
+
+            // Resolve with the userId if token is valid
+            resolve(decoded.userId);
+        });
+    });
+};
 const io = socket(server,{
   cors: {
     origin: "*", // Allow all origins (adjust as needed)
@@ -17,8 +41,20 @@ const io = socket(server,{
   }
 });
 
-io.on('connection', (connection) => {
-    console.log('a connection started', connection.id);
+io.on('connection', async (socket) => {
+    console.log('a connection started', socket.id);
+    
+    // Assume you have a way to get the userId, e.g., from a token
+    // const userId = await getUserIdFromToken(socket);
+    const userId = '664778157312fd64b4f49dd1';
+    if (userId) {
+        await userController.handleSocketConnection(userId, socket.id);
+    }
+
+    socket.on('disconnect', async () => {
+        console.log('a connection disconnected', socket.id);
+        await userController.handleSocketDisconnection(socket.id);
+    });
 });
 
 app.use(cors({

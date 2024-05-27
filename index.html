@@ -23,6 +23,12 @@
             // Update the UI to display the new bid amount
             document.getElementById('auction-updates').innerText = `New bid amount: $${data.amount}`;
         });
+         socket.on('newUser', (data) => {
+    console.log('New user is:', data.user);
+    // Update the UI to display the new user
+    document.getElementById('auction-updates').innerText = `New user is: ${data.user}`;
+});
+
     </script>
 </body>
 </html>

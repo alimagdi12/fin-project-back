@@ -20,7 +20,7 @@ class UserRepositry {
             if (!user) {
                 throw new Error("User not found.");
             }
-     return user;
+    return user;
     }
 
 
@@ -106,6 +106,38 @@ class UserRepositry {
             } else {
                 return { success: false, message: 'No image provided' };
             }
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async updateSocketId(userId, socketId) {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error("User not found.");
+            }
+            user.userSocketId = socketId;
+            await user.save();
+            console.log('socketid saved successfully')
+            this.io.emit('newUser',{user})
+            return user;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async removeSocketId(socketId) {
+        try {
+            const user = await User.findOne({ userSocketId:socketId });
+            if (!user) {
+                throw new Error("User not found.");
+            }
+            user.userSocketId = null;
+            await user.save();
+            return user;
         } catch (err) {
             console.log(err);
             throw new Error(err);
