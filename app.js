@@ -23,7 +23,7 @@ io.on('connection', (connection) => {
 
 app.use(cors({
     origin: '*',
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST','PUT']
 }));
 
 // calling AuthRespositry and AuthController

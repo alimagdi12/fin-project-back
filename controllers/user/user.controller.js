@@ -42,7 +42,6 @@ async getUser(token){
         console.error(err);
         return { msg: 'Error fetching user', error: err.message };
     }
-
 }
 
     async updateUserImage(files,token) {

@@ -9,6 +9,8 @@ const productRouter = (productsController) => {
         try {
             token = req.headers['jwt'];
             await upload.uploadImage(req, res);
+      console.log(token);
+      console.log(req.body);
             const product = await productsController.addProduct(token, req.body, req.files);
             res.status(201).json(product);
         } catch (err) {
