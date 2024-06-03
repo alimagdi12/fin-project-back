@@ -33,6 +33,16 @@ class AuctionRepository {
         await auction.remove();
         return auction;
     }
+
+    async getAuctionById(data, token) {
+        const id = data.id;
+        const auction = await Auction.findById(id);
+        console.log(auction);
+        if (!auction) throw new Error("Auction not found");
+        return auction;
+    }
+
+
 }
 
 module.exports = AuctionRepository;

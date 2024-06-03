@@ -24,6 +24,16 @@ class AuctionController {
             return { message: err.message };
         }
     }
+
+    async getAuctionById(body, token) {
+        try {
+            const auction = await this.auctionRepository.getAuctionById(body, token);
+            return { message: 'Auction fetched successfully', auction };
+        } catch (err) {
+            console.error(err);
+            return { message: err.message }
+        }
+    }
 }
 
 module.exports = AuctionController;
