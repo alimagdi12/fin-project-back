@@ -8,9 +8,9 @@ class BidRepository {
     }
 
 
-async getAllBids(){
-    return Auction.find()
-}
+    async getAllBids(){
+        return Auction.find()
+    }
 
     async addBid(data, token) {
         const { amount, productId } = data;
@@ -56,7 +56,7 @@ async getAllBids(){
             throw new Error('You must enter a product Id');
         }
 
-        const auction = await Auction.findOne({ productId }).populate('bidsId').exec();
+        const auction = await Auction.findOne({ productId }).populate('bidsId productId').exec();
         if (!auction) {
             throw new Error(`There is no auction available with this product id ${productId}`);
         }

@@ -9,7 +9,6 @@ class AuctionRepository {
         const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.userId;
         
-        // Calculate expiration date
         const expirationDate = new Date(Date.now() + expirationDays * 24 * 60 * 60 * 1000);
 
         const auction = new Auction({ 
@@ -36,12 +35,20 @@ class AuctionRepository {
 
     async getAuctionById(data, token) {
         const id = data.id;
-        const auction = await Auction.findById(id);
+        const auction = await Auction.findById(id).populate('productId').exec();
         console.log(auction);
         if (!auction) throw new Error("Auction not found");
         return auction;
     }
 
+    async getHighestBid(data, token) {
+        const id = data.id;
+        const auction = await Auction.findById(id).populate('bidsId');
+        console.log(auction);
+        if (!auction) throw new Error("Auction not found");
+        const highestBid = auction.bidsId.reduce((max, current) => (current.bidValue > max.bidValue ? current : max), auction.bidsId[0]);
+        return highestBid;
+    }
 
 }
 

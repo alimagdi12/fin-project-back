@@ -34,6 +34,16 @@ class AuctionController {
             return { message: err.message }
         }
     }
+
+    async getHeighstBid(body, token) {
+        try {
+            const auction = await this.auctionRepository.getHighestBid(body, token);
+            return { message: 'Highest bid fetched successfully', auction };
+        } catch (err) {
+            console.error(err);
+            return { message: err.message };
+        }
+    }
 }
 
 module.exports = AuctionController;
