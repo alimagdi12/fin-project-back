@@ -14,13 +14,23 @@ const auctionRouter = (auctionController) => {
 
 
     router.delete('/delete-auction', async (req, res, next) => {
-        try { 
+        try {
             const token = req.headers['jwt'];
             const auction = await auctionController.deleteAuction(req.body, token);
             res.status(201).json(auction);
         }
         catch (err) {
             res.status(401).json(auction);
+        }
+    });
+
+    router.get('/get-auction-by-id/:id', async (req, res, next) => {
+        try {
+            const token = req.headers['jwt'];
+            const auction = await auctionController.getAuctionById(req.params, token);
+            res.status(200).json(auction);
+        } catch (err) {
+            res.status(401).json(auction)
         }
     })
 
