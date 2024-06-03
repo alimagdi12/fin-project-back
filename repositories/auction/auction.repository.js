@@ -1,6 +1,5 @@
 const Auction = require('../../models/auction/auction.model');
 const ProductStatus = require('../../models/productStatus/productStatus.model');
-
 const jwt = require("jsonwebtoken");
 
 class AuctionRepository {
@@ -30,6 +29,13 @@ class AuctionRepository {
 
         await auction.save();
         return auction;
+    }
+
+
+    async getAuctions() {
+        const auctions = await Auction.find().populate('userId', 'username').populate('categoryId').exec();
+        if (!auctions) throw new Error('no auctions found');
+        return auctions;
     }
 
     async deleteAuction(data, token) {
@@ -64,6 +70,8 @@ class AuctionRepository {
 
         return highestBid;
     }
+
+
 
 
 }

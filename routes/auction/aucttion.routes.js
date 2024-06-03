@@ -17,6 +17,16 @@ const auctionRouter = (auctionController) => {
     });
 
 
+    router.get('/get-auctions', async (req, res, next) => {
+        try {
+            const auctions = await auctionController.getAuctions();
+            res.status(200).json(auctions);
+        } catch (err) {
+            res.status(401).json(auction)
+        }
+    })
+
+
     router.delete('/delete-auction', async (req, res, next) => {
         try {
             const token = req.headers['jwt'];

@@ -14,6 +14,16 @@ class AuctionController {
         }
     }
 
+    async getAuctions() {
+        try { 
+            const auctions = await this.auctionRepository.getAuctions();
+            return {message : 'Auctions fetched successfully',auctions}
+        } catch (err) {
+            console.error(err);
+            return {message:err.message}
+        }
+    }
+
     async deleteAuction(body, token) {
         try { 
             const auction = await this.auctionRepository.deleteAuction(body, token);
