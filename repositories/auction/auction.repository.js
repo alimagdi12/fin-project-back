@@ -1,21 +1,31 @@
- Auction = require('../../models/auction/auction.model');
+const Auction = require('../../models/auction/auction.model');
+const ProductStatus = require('../../models/productStatus/productStatus.model');
+
 const jwt = require("jsonwebtoken");
 
 class AuctionRepository {
     constructor() {}
 
-    async addAuction(data, token) {
-        const { expirationDays, productId , initialValue} = data;
+    async addAuction(data,files, token) {
+        const { expirationDays , initialValue , title , imagesUrl, categoryId, quantity, location , productStatus} = data;
         const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.userId;
         
         const expirationDate = new Date(Date.now() + expirationDays * 24 * 60 * 60 * 1000);
+        const folderName = title + new Date().toISOString().split('T')[0];
+        const status = await ProductStatus.findOne({ status: productStatus });
+        const statusId = status._id;
 
         const auction = new Auction({ 
             expirationDate, 
-            productId, 
             userId,
-            initialValue
+            title,
+            initialValue,
+            folderName,
+            categoryId,
+            quantity,
+            location,
+            status:statusId
         });
 
         await auction.save();

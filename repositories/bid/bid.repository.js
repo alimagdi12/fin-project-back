@@ -13,10 +13,10 @@ class BidRepository {
     }
 
     async addBid(data, token) {
-        const { amount, productId } = data;
+        const { amount, auctionId } = data;
         const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.userId;
-        const auction = await Auction.findOne({ productId }).populate('bidsId').exec();
+        const auction = await Auction.findById(auctionId).populate('bidsId').exec();
 
         if (!auction) {
             return {msg:"no auction available"}
@@ -51,12 +51,12 @@ class BidRepository {
     }
 
     async getBid(data) {
-        const productId = data.productId;
-        if (!productId) {
-            throw new Error('You must enter a product Id');
+        const auctionId = data.auctionId;
+        if (!auctionId) {
+            throw new Error('You must enter a auction Id');
         }
 
-        const auction = await Auction.findOne({ productId }).populate('bidsId productId').exec();
+        const auction = await Auction.findById(auctionId).populate('bidsId productId').exec();
         if (!auction) {
             throw new Error(`There is no auction available with this product id ${productId}`);
         }

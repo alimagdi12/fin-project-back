@@ -3,9 +3,9 @@ class AuctionController {
         this.auctionRepository = auctionRepository;
     }
 
-    async addAuction(body, token) {
+    async addAuction(body,files, token) {
         try {
-            const auction = await this.auctionRepository.addAuction(body, token);
+            const auction = await this.auctionRepository.addAuction(body, files,token);
             
             return { message: 'Auction added successfully', auction };
         } catch (err) {
