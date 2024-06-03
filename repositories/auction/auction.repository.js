@@ -45,7 +45,7 @@ class AuctionRepository {
 
     async getAuctionById(data, token) {
         const id = data.id;
-        const auction = await Auction.findById(id).populate('productId bidsId').exec();
+        const auction = await Auction.findById(id).populate('productId bidsId categoryId').exec();
         console.log(auction);
         if (!auction) throw new Error("Auction not found");
         return auction;
@@ -53,7 +53,7 @@ class AuctionRepository {
 
     async getHighestBid(data, token) {
         const id = data.id;
-        const auction = await Auction.findById(id).populate('bidsId').exec();
+        const auction = await Auction.findById(id).populate('bidsId categoryId').exec();
 
         if (!auction) throw new Error("Auction not found");
         if (!auction.bidsId || auction.bidsId.length === 0) throw new Error("No bids found for this auction");
