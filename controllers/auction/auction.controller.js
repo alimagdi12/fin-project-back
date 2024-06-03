@@ -37,8 +37,8 @@ class AuctionController {
 
     async getHeighstBid(body, token) {
         try {
-            const auction = await this.auctionRepository.getHighestBid(body, token);
-            return { message: 'Highest bid fetched successfully', auction };
+            const bid = await this.auctionRepository.getHighestBid(body, token);
+            return { message: 'Highest bid fetched successfully', bid };
         } catch (err) {
             console.error(err);
             return { message: err.message };
