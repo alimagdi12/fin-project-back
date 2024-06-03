@@ -22,7 +22,8 @@ const AuctionSchema = new Schema({
         required: true
     },
     productId: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
         required: true,
         unique: true
     },
