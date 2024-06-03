@@ -12,6 +12,14 @@ const bidRouter = (bidController) => {
         }
     });
 
+    router .get('/get-bids', async (req,res,next)=>{
+        try {
+            const bids = await bidController.getAllBids();
+            res.status(200).json(bids)
+        } catch (err) {
+            res.status(400).json(bids);
+        }
+    })
 
     router.get('/get-bid', async (req, res, next) => {
         try {

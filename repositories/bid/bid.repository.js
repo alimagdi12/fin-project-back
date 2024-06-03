@@ -6,6 +6,12 @@ class BidRepository {
     constructor(io) {
         this.io = io;
     }
+
+
+async getAllBids(){
+    return Auction.find()
+}
+
     async addBid(data, token) {
         const { amount, productId } = data;
         const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
