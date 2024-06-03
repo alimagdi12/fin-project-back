@@ -13,7 +13,15 @@ class BidController {
             return { message: err.message };
         }
     }
+async getAllBids(){
+    try{
+const bids = await this.bidRepository.getAllBids()
+return {message:'bid fetched successfully',bids}
+    }catch(err){
 
+        return {message:err.message}
+    }
+}
     async getBid(body) {
         try {
             const bid = await this.bidRepository.getBid(body);

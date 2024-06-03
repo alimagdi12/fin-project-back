@@ -1,4 +1,4 @@
-const Auction = require('../../models/auction/auction.model');
+ Auction = require('../../models/auction/auction.model');
 const jwt = require("jsonwebtoken");
 
 class AuctionRepository {
